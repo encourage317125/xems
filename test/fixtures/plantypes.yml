@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  price: 1.5
+  vat: 1.5
+  minprice: 1.5
+  plancategory_id: 
+
+two:
+  name: MyString
+  price: 1.5
+  vat: 1.5
+  minprice: 1.5
+  plancategory_id: 

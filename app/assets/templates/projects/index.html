@@ -1,0 +1,419 @@
+<div class="page page-grid">
+    <div class="row" data-ng-controller="ProjectCtrl">
+        <div class="col-md-8">
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span class="glyphicon glyphicon-th"></span> {{selectedProject.name}}</strong>
+                    <span class="glyphicon glyphicon-pencil" style="float:right;cursor: pointer;" data-ng-click="editProject()"></span>
+                </div>
+                <div class="panel-body">
+                    <div data-ng-show="isEditingProject == false">
+                        <ul class="list-unstyled list-info">
+                            <li>
+                                <label>Name</label>
+                                {{selectedProject.name}}
+                            </li>
+                            <li>
+                                <label>Category</label>
+                                {{selectedProject.category}}
+                            </li>
+                            <li class="status">
+                                <label>Status</label>
+                                <span class="{{arr_status[selectedProject.status]}}">{{arr_status[selectedProject.status].capitalize()}}</span>
+                            </li>
+                            <li>
+                                <label>Start date</label>
+                                <i class="fa fa-calendar"></i>&nbsp;{{selectedProject.startdate}}
+                            </li>
+                            <li>
+                                <label>End date</label>
+                                <i class="fa fa-calendar"></i>&nbsp;{{selectedProject.enddate}}
+                            </li>
+                        </ul>
+                    </div>
+                    <form class="form-horizontal form-validation" data-ng-submit="doneProject()" data-ng-hide="isEditingProject == false">
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="">Name</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text"
+                                           class="form-control"
+                                           required
+                                           data-ng-model="selectedProject.name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="">Start date</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text"
+                                           class="form-control"
+                                           datepicker-popup="dd/MM/yyyy"
+                                           ng-model="selectedProject.startdate"
+                                           max="'2015-06-22'"
+                                           ng-required="true"
+                                           close-text="Close">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    <label for="">End date</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="text"
+                                           class="form-control"
+                                           datepicker-popup="dd/MM/yyyy"
+                                           ng-model="selectedProject.enddate"
+                                           max="'2015-06-22'"
+                                           ng-required="true"
+                                           close-text="Close">
+                                </div>
+                            </div>
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    >Save Changes</button>
+                            <button type="button" class="btn btn-default"
+                                    data-ng-click="cancelEditingProject()"
+                                    >Cancel</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="filters nav nav-tabs">
+                        <li data-ng-class="{active: project_tabs['users'] == true}">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="onClickTab('users')"
+                                    >Users</a>
+                        </li>
+                        <li data-ng-class="{active: project_tabs['customers'] == true}">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="onClickTab('customers')"
+                                    >Customers</a>
+                        </li>
+                        <li data-ng-class="{active: project_tabs['tasks'] == true}">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="onClickTab('tasks')"
+                                    >Tasks</a>
+                        </li>
+                        <li data-ng-class="{active: project_tabs['files'] == true}">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="onClickTab('files')"
+                                    >Files</a>
+                        </li>
+                    </ul>
+                    <section data-ng-show="project_tabs['users'] == true">
+                        <table class="table" data-ng-controller="ProjectUserCtrl">
+                            <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: right;">
+                                    <form name="form_user" class="form-inline form-validation" role="form" data-ng-submit="submitUser()">
+                                        <div class="form-group">
+                                            <select class="form-control" data-ng-model="newProjectUser.user_id">
+                                                <option value={{user.id}} data-ng-repeat="user in allusers">{{user.name}}</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr data-ng-repeat="user in users">
+                                <td><img data-ng-src="{{user.thumb}}" alt="" class="img-circle img24_24">&nbsp;{{user.name}}</td>
+                                <td><span class="icon glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{user.email}}" target="_top">{{user.email}}</a></td>
+                                <td><span class="icon glyphicon glyphicon-map-marker"></span>&nbsp;{{user.address}}</td>
+                                <td><span class="icon glyphicon glyphicon-earphone"></span>&nbsp;{{user.phone}}</td>
+                                <td style="text-align: right;"><span class="badge" style="cursor: pointer;" data-ng-click="removeUser(user)">X</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section data-ng-show="project_tabs['customers'] == true">
+                        <table class="table" data-ng-controller="ProjectCustomerCtrl">
+                            <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align: right;">
+                                    <form name="form_customer" class="form-inline form-validation" role="form" data-ng-submit="submitCustomer()">
+                                        <div class="form-group">
+                                            <select class="form-control" data-ng-model="newProjectCustomer.customer_id">
+                                                <option value={{customer.id}} data-ng-repeat="customer in allcustomers">{{customer.name}}</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr data-ng-repeat="customer in customers">
+                                <td><span class="icon fa fa-building-o"></span>&nbsp;{{customer.name}}</td>
+                                <td><span class="icon glyphicon glyphicon-map-marker"></span>&nbsp;{{customer.address}}</td>
+                                <td><span class="icon glyphicon glyphicon-earphone"></span>&nbsp;{{customer.phone}}</td>
+                                <td><span class="icon glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{customer.email}}" target="_top">{{customer.email}}</a></td>
+                                <td><span class="icon glyphicon glyphicon-globe"></span>&nbsp;<a href="http://{{customer.website}}" target="_blank">{{customer.website}}</a></td>
+                                <td style="text-align: right;"><span class="badge" style="cursor: pointer;" data-ng-click="removeCustomer(customer)">X</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="page page-tasks" data-ng-show="project_tabs['tasks'] == true">
+                        <section class="task-container" data-ng-controller="ProjectTaskCtrl">
+                            <form data-ng-submit="submitTask()" class="add-task">
+                                <input type="text"
+                                       placeholder="New Task"
+                                       class="form-control"
+                                       data-ng-model="newTask.content"
+                                       autofocus>
+                                <a type="submit" class="submit-button">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </a>
+                            </form>
+                            <section  data-ng-cloak>
+                                <ul class="task-list list-unstyled">
+                                    <li data-ng-repeat="task in tasks"
+                                        data-ng-class="{completed: task.completed, editing: task == editedTask}">
+                                    <span class="view">
+                                        <input type="checkbox"
+                                               class="toggle-task"
+                                               data-ng-model="task.completed"
+                                               data-ng-change="completedTask(task)">
+                                        <label data-ng-dblclick="editTask(task)">{{task.content}}</label>
+                                        <span class="glyphicon glyphicon-pencil"
+                                              data-ng-click="editTask(task)"></span>
+                                        <span class="glyphicon glyphicon-remove"
+                                              data-ng-click="removeTask(task, $index)"
+                                                ></span>
+                                    </span>
+                                        <form data-ng-submit="doneTask(task, $index)">
+                                            <input type="text"
+                                                   class="edit form-control"
+                                                   data-ng-trim="false"
+                                                   data-ng-model="task.content"
+                                                   data-task-focus="task == editedTask">
+                                        </form>
+                                    </li>
+                                </ul>
+                            </section>
+                            <footer class="task-footer" style="text-align: center;">
+                               <span>
+                                    <strong>{{remainingCount}}</strong>
+                                    <span class="text-muted"
+                                          data-ng-pluralize count="remainingCount"
+                                          when="{one: 'item left', other: 'items left'}"></span>
+                                </span>
+                            </footer>
+                        </section>
+                    </section>
+                    <section data-ng-show="project_tabs['files'] == true">
+                        <table class="table" data-ng-controller="ProjectFileCtrl">
+                            <tbody>
+                            <tr>
+                                <td colspan="4" style="text-align: right;">
+                                    <img data-ng-src="/assets/loading.gif" alt="" class="img-circle img24_24" data-ng-show="IsUploaded">
+                                    <div class="btn-group">
+                                        <span class="btn btn-primary btn-file" data-ng-disabled="IsUploaded">
+                                        Select File <input type="file" id="fileUpload" fileread="file" />
+                                        </span>
+                                        <a class="btn btn-small btn-success" data-ng-click="uploadFile()" data-ng-disabled="file == null">Upload File</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-ng-repeat="file in files">
+                                <td><a href="{{file.url}}" target="_blank">{{file.name}}</a></td>
+                                <td>{{file.content_type}}</td>
+                                <td></td>
+                                <td style="text-align: right;"><span class="badge" style="cursor: pointer;" data-ng-click="removeFile(file)">X</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="glyphicon glyphicon-th"></span>&nbsp;Projects</div>
+                <section>
+                    <ul class="filters list-inline nav nav-tabs">
+                        <li data-ng-class="{active: statusFilter == ''}">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="filter('all')"
+                                    >All</a>
+                        </li>
+                        <li data-ng-class="{active: statusFilter.status == 1 }">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="filter('active')"
+                                    >Active</a>
+                        </li>
+                        <li data-ng-class="{active: statusFilter.status == 0 }">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="filter('inactive')"
+                                    >Inactive</a>
+                        </li>
+                        <li data-ng-class="{active: statusFilter.status == 2 }">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="filter('end')"
+                                    >End</a>
+                        </li>
+                    </ul>
+                </section>
+                <div class="panel-body block_view">
+                    <table class="table">
+                        <tr data-ng-repeat="project in projects | filter:statusFilter" style="cursor: pointer;" data-ng-class="{success: project == selectedProject}" data-ng-click="selectProject(project)">
+                            <td>{{project.name}}</td>
+                            <td class="status"><span class="{{arr_status[project.status]}}">{{arr_status[project.status].capitalize()}}</span></td>
+                            <td style="text-align: right;">
+                                <span class="glyphicon glyphicon-remove" data-ng-click="removeProject(project)"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div data-ng-controller="CategoryCtrl">
+                <section class="panel panel-default">
+                    <div class="panel-body">
+                        <button class="btn btn-primary" ng-click="isNewCategoryCollapsed = !isNewCategoryCollapsed">New Category</button>
+                        <div collapse="isNewCategoryCollapsed">
+                            <br/>
+                            <form name="form_category" class="form-horizontal form-validation" data-ng-submit="submitCategory()">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <label for="">Title</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   required
+                                                   data-ng-model="newCategory.title">
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            data-ng-disabled="!canSubmitCategory()"
+                                            data-ng-click="isNewCategoryCollapsed = true">Create</button>
+                                    <button type="button" class="btn btn-default"
+                                            data-ng-click="isNewCategoryCollapsed = true"
+                                            >Cancel</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <div class="panel panel-default">
+                <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Project Categories</strong></div>
+                <div class="panel-body block_view">
+                    <div class="grid-structure" data-ng-repeat="category in categories">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="widget-container" style="cursor: pointer;" data-ng-class="{selected: category == selectedCategory}">
+                                    <div data-ng-hide="category == editedCategory">
+                                        <span>{{category.title}}</span>
+                                        <span style="float: right;">
+                                            <span class="glyphicon glyphicon-plus" style="cursor: pointer;" data-ng-click="selectCategory(category)"></span>&nbsp;
+                                            <span class="glyphicon glyphicon-pencil" style="cursor: pointer;" data-ng-click="editCategory(category);"></span>&nbsp;
+                                            <span class="glyphicon glyphicon-remove" style="cursor: pointer;" data-ng-click="removeCategory(category, $index);"></span>
+                                        </span>
+                                    </div>
+                                    <form name="form_edit_category" class="form-inline form-validation" data-ng-submit="doneCategory(category)" data-ng-show="category == editedCategory">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <input type="text"
+                                                       class="form-control"
+                                                       required
+                                                       data-ng-model="category.title">
+                                            </div>
+                                            <button type="submit"
+                                                    class="btn btn-success"
+                                                    data-ng-disabled="!form_edit_category.$valid">Save</button>
+                                            <button type="button" class="btn btn-default"
+                                                    data-ng-click="cancelCategory(category);"
+                                                    >Cancel</button>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="panel panel-default" data-ng-controller="ProjectNewCtrl">
+                    <div class="panel-heading"><strong><span class="glyphicon glyphicon-plus"></span> New Project</strong></div>
+                    <div class="panel-body">
+                        <div data-ng-hide="$parent.selectedCategory != null">
+                            <p>Please select category above by clicking (<span class="glyphicon glyphicon-plus"></span>) button to create project.</p>
+                        </div>
+                        <div data-ng-show="$parent.selectedCategory != null">
+                            <form name="form_project" class="form-horizontal form-validation" data-ng-submit="submitProject()">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <label for="">Category</label>
+                                        </div>
+                                        <div class="col-sm-9">{{$parent.selectedCategory.title}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <label for="">Name</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   required
+                                                   data-ng-model="newProject.name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <label for="">Start date</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   datepicker-popup="dd/MM/yyyy"
+                                                   ng-model="newProject.startdate"
+                                                   min="'{{mindate}}'"
+                                                   max="'2015-06-22'"
+                                                   ng-required="true"
+                                                   close-text="Close">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <label for="">End date</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   datepicker-popup="dd/MM/yyyy"
+                                                   ng-model="newProject.enddate"
+                                                   min="'{{mindate}}'"
+                                                   max="'2015-06-22'"
+                                                   ng-required="true"
+                                                   close-text="Close">
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            data-ng-disabled="!canSubmitProject()">Create</button>
+                                    <button type="button" class="btn btn-default"
+                                            data-ng-click="cancelProject()"
+                                            >Cancel</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

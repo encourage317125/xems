@@ -1,0 +1,89 @@
+<div class="page page-tasks">
+    <div class="row">
+        <div class="col-md-12">
+            <section class="task-container" data-ng-controller="TaskCtrl">
+                <form data-ng-submit="submitTask()" class="add-task">
+                    <input type="text"
+                           placeholder="New Task"
+                           class="form-control"
+                           data-ng-model="newTask.content"
+                           autofocus>
+                    <a type="submit" class="submit-button">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </form>
+
+                <section>
+                    <ul class="filters list-inline nav nav-tabs">
+                        <li data-ng-class="{active: statusFilter == ''}">
+                            <a href="" 
+                               data-toggle="tab"
+                               data-ng-click="filter('all')"
+                               >All</a>
+                        </li>
+                        <li data-ng-class="{active: statusFilter.completed == false }">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="filter('active')"
+                               >Active</a>
+                        </li>
+                        <li data-ng-class="{active: statusFilter.completed == true }">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click="filter('completed')"
+                               >Completed</a>
+                        </li>
+                    </ul>
+                </section>
+
+                <section  data-ng-cloak>
+                    <ul class="task-list list-unstyled">
+                        <li data-ng-repeat="task in tasks | filter:statusFilter"
+                            data-ng-class="{completed: task.completed, editing: task == editedTask}">
+                            <span class="view">
+                                <input type="checkbox"
+                                       class="toggle-task"
+                                       data-ng-model="task.completed"
+                                       data-ng-change="completedTask(task)">
+                                <label data-ng-dblclick="editTask(task)">{{task.content}}</label>
+                                <span class="glyphicon glyphicon-pencil"
+                                      data-ng-click="editTask(task)"></span>
+                                <span class="glyphicon glyphicon-remove"
+                                      data-ng-click="removeTask(task, $index)"
+                                      ></span>
+                            </span>
+                            <form data-ng-submit="doneTask(task, $index)">
+                                <input type="text"
+                                       class="edit form-control"
+                                       data-ng-trim="false"
+                                       data-ng-model="task.content"
+                                       data-task-focus="task == editedTask">
+                            </form>
+                        </li>
+                    </ul>
+                </section>
+
+                <footer class="task-footer">
+                    <ul class="list-inline clearfix">
+                        <li class="first-item">
+                            <input type="checkbox"
+                                   id="toggle-all"
+                                   data-ng-model="allChecked"
+                                   data-ng-change="markAllTasks(allChecked)">
+                            <label for="toggle-all">Mark all as done</label>
+                        </li>
+                        <li class="text-center">
+                            <span>
+                                <strong>{{remainingCount}}</strong>
+                                <span class="text-muted"
+                                      data-ng-pluralize count="remainingCount"
+                                      when="{one: 'item left', other: 'items left'}"></span>
+                            </span>                            
+                        </li>
+                    </ul>
+                </footer>
+                
+            </section>
+        </div>
+    </div>
+</div>

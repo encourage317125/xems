@@ -1,0 +1,142 @@
+<div class="page page-tasks">
+    <div class="row" data-ng-controller="UserCtrl">
+        <div class="col-md-8">
+            <div class="panel panel-profile">
+                <div class="panel-heading bg-success clearfix">
+                    <a href="" class="pull-left profile">
+                        <img alt="" data-ng-src={{selectedUser.thumb}} class="img-circle img80_80">
+                    </a>
+                    <h3>{{selectedUser.name}}</h3>
+                    <p>{{selectedUser.role}}</p>
+                </div>
+                <ul class="list-unstyled list-info">
+                    <li>
+                        <span class="icon glyphicon glyphicon-user"></span>
+                        <label>Name</label>
+                        {{selectedUser.name}}
+                    </li>
+                    <li>
+                        <span class="icon glyphicon glyphicon-envelope"></span>
+                        <label>Email</label>
+                        <a href="mailto:{{selectedUser.email}}" target="_top">{{selectedUser.email}}</a>
+                    </li>
+                    <li>
+                        <span class="icon glyphicon glyphicon-map-marker"></span>
+                        <label>Address</label>
+                        {{selectedUser.address}}
+                    </li>
+                    <li>
+                        <span class="icon glyphicon glyphicon-earphone"></span>
+                        <label>Phone</label>
+                        {{selectedUser.phone}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <button class="btn btn-primary" ng-click="isNewUserCollapsed = !isNewUserCollapsed">New User</button>
+                    <div collapse="isNewUserCollapsed">
+                        <br/>
+                        <form name="form_user" class="form-horizontal form-validation" data-ng-submit="submitUser()">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Name</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="newUser.name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Email</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="email"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="newUser.email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Role</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" data-ng-model="newUser.role_id">
+                                            <option value="1">Administrators</option>
+                                            <option value="2">Users</option>
+                                            <option value="3">Staffs</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                        class="btn btn-success"
+                                        data-ng-disabled="!canSubmitUser()"
+                                        data-ng-click="isNewUserCollapsed = !isNewUserCollapsed"
+                                        >Create</button>
+                                <button type="button" class="btn btn-default"
+                                        data-ng-click="isNewUserCollapsed = !isNewUserCollapsed"
+                                        >Cancel</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <section class="panel panel-default">
+                <div class="panel-heading"><span class="fa fa-user"></span>&nbsp;Users</div>
+                <div class="panel-body">
+                    <accordion close-others="oneAtATime" class="ui-accordion">
+                        <accordion-group heading="Administrators">
+                            <table class="table">
+                                <tbody>
+                                <tr data-ng-repeat="user in users | filter:{role_id: 1}" style="cursor: pointer;" data-ng-class="{success: user == selectedUser}" data-ng-click="selectUser(user)">
+                                    <td>{{user.name}}</td>
+                                    <td><a href="mailto:{{user.email}}" target="_top">{{user.email}}</a></td>
+                                    <td style="text-align: right;">
+                                        <span class="glyphicon glyphicon-remove" data-ng-click="removeUser(user)" data-ng-if="user.id != currentUser.id"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+                        <accordion-group heading="Users" is-open="true">
+                            <table class="table">
+                                <tbody>
+                                <tr data-ng-repeat="user in users | filter:{role_id: 2}" style="cursor: pointer;" data-ng-class="{success: user == selectedUser}" data-ng-click="selectUser(user)">
+                                    <td>{{user.name}}</td>
+                                    <td><a href="mailto:{{user.email}}" target="_top">{{user.email}}</a></td>
+                                    <td style="text-align: right;">
+                                        <span class="glyphicon glyphicon-remove" data-ng-click="removeUser(user)" data-ng-if="user.id != currentUser.id"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+                        <accordion-group heading="Staffs">
+                            <table class="table">
+                                <tbody>
+                                <tr data-ng-repeat="user in users | filter:{role_id: 3}" style="cursor: pointer;" data-ng-class="{success: user == selectedUser}" data-ng-click="selectUser(user)">
+                                    <td>{{user.name}}</td>
+                                    <td><a href="mailto:{{user.email}}" target="_top">{{user.email}}</a></td>
+                                    <td style="text-align: right;">
+                                        <span class="glyphicon glyphicon-remove" data-ng-click="removeUser(user)" data-ng-if="user.id != currentUser.id"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </accordion-group>
+                    </accordion>
+                    <hr>
+                    <p>Open only one at a time?</p>
+                    <label class="switch switch-success"><input type="checkbox" ng-model="oneAtATime"><i></i></label>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

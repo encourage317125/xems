@@ -1,0 +1,133 @@
+<div class="page page-profile" data-ng-controller="ProfileCtrl">
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-profile">
+                <div class="panel-heading text-center bg-info">
+                    <input type="file" id="fileUpload" fileread="photo" data-ng-show="false" />
+                    <img alt="" data-ng-src="{{currentUser.photo}}" class="img-circle img80_80" data-ng-click="openFileWindow()" onmouseover="this.style.opacity = 0.7;" onmouseout="this.style.opacity = 1;">
+                    <h3>{{currentUser.name}}</h3>
+                    <p>{{currentUser.role}}</p>
+                </div>
+            </div>
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span class="glyphicon glyphicon-th"></span> Profile Info</strong>
+                    <span class="glyphicon glyphicon-pencil" style="float:right;cursor: pointer;" data-ng-click="editMode=true" data-ng-hide="editMode"></span>
+                </div>
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-body" data-ng-hide="editMode">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="icon glyphicon glyphicon-user"></span>
+                                    <label>Name</label>
+                                    {{currentUser.name}}
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-envelope"></span>
+                                    <label>Email</label>
+                                    <a href="mailto:{{selectedUser.email}}" target="_top">{{currentUser.email}}</a>
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-map-marker"></span>
+                                    <label>Address</label>
+                                    {{currentUser.address}}
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-earphone"></span>
+                                    <label>Phone</label>
+                                    {{currentUser.phone}}
+                                </li>
+                                <li data-ng-if="currentUser.role_id == 4">
+                                    <span class="icon fa fa-building-o"></span>
+                                    <label>Company</label>
+                                    {{currentUser.customer}}
+                                </li>
+                                <li data-ng-if="currentUser.role_id == 5">
+                                    <span class="icon glyphicon glyphicon-home"></span>
+                                    <label>Supplier</label>
+                                    {{currentUser.supplier}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="media-body" data-ng-show="editMode">
+                            <form name="form_edit_user" class="form-horizontal form-validation" enctype='multipart/form-data' data-ng-submit="doneUser()">
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Email</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        {{currentUser.email}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Name</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input  type="text"
+                                                class="form-control"
+                                                data-ng-model="editedUser.name"
+                                                required
+                                                data-ng-minlength="2"
+                                                data-ng-maxlength="50">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">New Password</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input  type="password"
+                                                class="form-control"
+                                                data-ng-model="editedUser.password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Address</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input  type="text"
+                                                class="form-control"
+                                                data-ng-model="editedUser.address"
+                                                data-ng-minlength="2"
+                                                data-ng-maxlength="150">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Phone</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input  type="text"
+                                                class="form-control"
+                                                data-ng-model="editedUser.phone"
+                                                data-ng-minlength="9"
+                                                data-ng-maxlength="10">
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                        class="btn btn-success"
+                                        data-ng-click="editMode=false"
+                                        data-ng-disabled="!form_edit_user.$valid">Save Changes</button>
+                                <button type="button" class="btn btn-default"
+                                        data-ng-click="editMode=false"
+                                        >Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="callout callout-info">
+                <p>Tips:</p>
+                <p> - Click the Profile picture to change it.</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,236 @@
+<div class="page page-grid">
+    <div class="row">
+        <div class="col-md-8">
+
+        </div>
+        <div class="col-md-4">
+            <div data-ng-controller="PlanTypeCtrl">
+                <section class="panel panel-default">
+                    <div class="panel-body">
+                        <button class="btn btn-primary" ng-click="isNewPlancategoryCollapsed = !isNewPlancategoryCollapsed">New Category</button>
+                        <div collapse="isNewPlancategoryCollapsed">
+                            <br/>
+                            <form name="form_category" class="form-horizontal form-validation" data-ng-submit="submitPlancategory()">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-sm-2">
+                                            <label for="">Title</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   required
+                                                   data-ng-model="newPlancategory.title">
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            data-ng-disabled="!canSubmitPlancategory()"
+                                            data-ng-click="isNewPlancategoryCollapsed = true">Create</button>
+                                    <button type="button" class="btn btn-default"
+                                            data-ng-click="isNewPlancategoryCollapsed = true"
+                                            >Cancel</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Plan Categories & Types</strong></div>
+                    <div class="panel-body block_view">
+                        <div class="grid-structure" data-ng-repeat="plancategory in plancategories">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="widget-container" style="cursor: pointer;" data-ng-class="{selected: plancategory == selectedPlancategory}">
+                                        <div data-ng-hide="plancategory == editedPlancategory">
+                                            <b>{{plancategory.title}}</b>
+                                            <span style="float: right;">
+                                                <span class="glyphicon glyphicon-plus" style="cursor: pointer;" data-ng-click="selectPlancategory(plancategory)"></span>&nbsp;
+                                                <span class="glyphicon glyphicon-pencil" style="cursor: pointer;" data-ng-click="editPlancategory(plancategory);$event.stopPropagation();"></span>&nbsp;
+                                                <span class="glyphicon glyphicon-remove" style="cursor: pointer;" data-ng-click="removePlancategory(plancategory, $index);$event.stopPropagation();"></span>
+                                            </span>
+                                        </div>
+                                        <form name="form_edit_category" class="form-inline form-validation" data-ng-submit="donePlancategory(plancategory)" data-ng-show="plancategory == editedPlancategory">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           required
+                                                           data-ng-model="plancategory.title">
+                                                </div>
+                                                <button type="submit"
+                                                        class="btn btn-success"
+                                                        data-ng-click="$event.stopPropagation();"
+                                                        data-ng-disabled="!form_edit_category.$valid">Save</button>
+                                                <button type="button" class="btn btn-default"
+                                                        data-ng-click="cancelPlancategory(plancategory);$event.stopPropagation();"
+                                                        >Cancel</button>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul>
+                                        <li class="list-group-item" data-ng-repeat="plantype in plantypes |filter: {plancategory_id:plancategory.id}">
+                                            <div data-ng-hide="plantype == editedPlantype">
+                                                <a href="" popover-trigger="mouseenter" popover-placement="right" popover="Default: ${{plantype.price}}, VAT: {{plantype.vat}}%, Minimum: ${{plantype.minprice}}">{{plantype.name}}</a>
+                                                <span style="float: right;">
+                                                    <span class="glyphicon glyphicon-pencil" style="cursor: pointer;" data-ng-click="editType(plantype)"></span>&nbsp;
+                                                    <span class="glyphicon glyphicon-remove" style="cursor: pointer;" data-ng-click="removeType(plantype, $index)"></span>
+                                                </span>
+                                            </div>
+                                            <form name="form_edit_type" class="form-horizontal form-validation" data-ng-submit="doneType(plantype)" data-ng-show="plantype == editedPlantype">
+                                                <fieldset>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <label for="">Name</label>
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   required
+                                                                   data-ng-model="plantype.name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <label for="">Default price(USD)</label>
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   required
+                                                                   data-ng-model="plantype.price">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <label for="">VAT(%)</label>
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   required
+                                                                   data-ng-model="plantype.vat">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">
+                                                            <label for="">Minimum price(USD)</label>
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <input type="text"
+                                                                   class="form-control"
+                                                                   required
+                                                                   data-ng-model="plantype.minprice">
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit"
+                                                            class="btn btn-success"
+                                                            data-ng-disabled="!form_edit_type.$valid">Save</button>
+                                                    <button type="button" class="btn btn-default"
+                                                            data-ng-click="cancelType(plantype)"
+                                                            >Cancel</button>
+                                                </fieldset>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <section class="panel panel-default">
+                    <div class="panel-heading"><strong><span class="glyphicon glyphicon-plus"></span> New Type</strong></div>
+                    <div class="panel-body">
+                        <div data-ng-hide="selectedPlancategory != null">
+                            <p>Please select category above by clicking (<span class="glyphicon glyphicon-plus"></span>) button to create plan type.</p>
+                        </div>
+                        <div data-ng-show="selectedPlancategory != null">
+                            <form name="form_type" class="form-horizontal form-validation" data-ng-submit="submitType()">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                            <label for="">Category</label>
+                                        </div>
+                                        <div class="col-sm-9">{{selectedPlancategory.title}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                            <label for="">Name</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <input type="text"
+                                                   class="form-control"
+                                                   required
+                                                   data-ng-model="newPlantype.name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                            <label for="">Default price</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       required
+                                                       data-ng-model="newPlantype.price">
+                                                <span class="input-group-addon">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                            <label for="">VAT(%)</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text"
+                                                       ui-range-slider
+                                                       data-slider-min="0"
+                                                       data-slider-max="100"
+                                                       data-slider-step="0.5"
+                                                       data-slider-orientation="horizontal"
+                                                       data-slider-value="0"
+                                                       data-slider-selection="before"
+                                                       data-slider-tooltip="show"
+                                                       data-slider-handle="round"
+                                                       data-ng-model="newPlantype.vat">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-3">
+                                            <label for="">Minimum price</label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text"
+                                                       class="form-control"
+                                                       required
+                                                       data-ng-model="newPlantype.minprice">
+                                                <span class="input-group-addon">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            data-ng-disabled="!canSubmitType()"
+                                            >Create</button>
+                                    <button type="button" class="btn btn-default"
+                                            data-ng-click="selectedPlancategory = null"
+                                            >Cancel</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+</div>
+</div>

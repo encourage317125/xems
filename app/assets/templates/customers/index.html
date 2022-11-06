@@ -1,0 +1,244 @@
+<div class="page" data-ng-controller="CustomerCtrl">
+    <div class="row">
+        <div class="col-md-8">
+            <section class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span class="glyphicon glyphicon-th"></span> {{selectedCustomer.name}}</strong>
+                    <span class="glyphicon glyphicon-pencil" style="float:right;cursor: pointer;" data-ng-click="editCustomer()"></span>
+                </div>
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-body" data-ng-show="isEditingCustomer == false">
+                            <ul class="list-unstyled list-info">
+                                <li>
+                                    <span class="icon fa fa-building-o"></span>
+                                    <label>Name</label>
+                                    {{selectedCustomer.name}}
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-map-marker"></span>
+                                    <label>Address</label>
+                                    {{selectedCustomer.address}}
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-earphone"></span>
+                                    <label>Phone</label>
+                                    {{selectedCustomer.phone}}
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-envelope"></span>
+                                    <label>Email</label>
+                                    <a href="mailto:{{selectedCustomer.email}}" target="_top">{{selectedCustomer.email}}</a>
+                                </li>
+                                <li>
+                                    <span class="icon glyphicon glyphicon-globe"></span>
+                                    <label>Website</label>
+                                    <a href="http://{{selectedCustomer.website}}" target="_blank">{{selectedCustomer.website}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <form class="form-horizontal form-validation" data-ng-submit="doneCustomer()" data-ng-hide="isEditingCustomer == false">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="">Name</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="selectedCustomer.name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="">Address</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               data-ng-model="selectedCustomer.address">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="">Phone</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="tel"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="selectedCustomer.phone"
+                                               placeholder="0000000000">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="">Website</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               data-ng-model="selectedCustomer.website"
+                                               placeholder="www.example.com">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label for="">Email</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="email"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="selectedCustomer.email"
+                                               placeholder="info@example.com">
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                        class="btn btn-success"
+                                        >Save Changes</button>
+                                <button type="button" class="btn btn-default"
+                                        data-ng-click="cancelEditingCustomer()"
+                                        >Cancel</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="filters nav nav-tabs">
+                        <li class="active">
+                            <a href=""
+                               data-toggle="tab"
+                               data-ng-click=""
+                                    >Contacts</a>
+                        </li>
+                    </ul>
+                    <section>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" style="text-align: right;">
+                                        <button class="btn btn-primary" data-ng-click="isNewContact = true" data-ng-show="isNewContact == false">New</button>
+                                        <form name="form_contact" class="form-inline form-validation" role="form" data-ng-submit="submitContact()" data-ng-hide="isNewContact == false">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" placeholder="Name" required data-ng-model="newContact.name" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" placeholder="Email" required data-ng-model="newContact.email" />
+                                            </div>
+                                            <button type="submit" class="btn btn-success" data-ng-disabled="!canSubmitContact()" data-ng-click="isNewContact = false">Create</button>
+                                            <button type="button" class="btn btn-default" data-ng-click="isNewContact = false">Cancel</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr data-ng-repeat="user in users">
+                                    <td><img data-ng-src="{{user.thumb}}" alt="" class="img-circle img24_24">&nbsp;{{user.name}}</td>
+                                    <td><span class="icon glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{user.email}}" target="_top">{{user.email}}</a></td>
+                                    <td><span class="icon glyphicon glyphicon-map-marker"></span>&nbsp;{{user.address}}</td>
+                                    <td><span class="icon glyphicon glyphicon-earphone"></span>&nbsp;{{user.phone}}</td>
+                                    <td style="text-align: right;"><span class="badge" style="cursor: pointer;" data-ng-click="removeContact(user)">X</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <button class="btn btn-primary" ng-click="isNewCustomerCollapsed = !isNewCustomerCollapsed">New Customer</button>
+                    <div collapse="isNewCustomerCollapsed">
+                        <br/>
+                        <form name="form_customer" class="form-horizontal form-validation" data-ng-submit="submitCustomer()">
+                            <fieldset>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Name</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="newCustomer.name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Address</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               data-ng-model="newCustomer.address">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Phone</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="tel"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="newCustomer.phone"
+                                               placeholder="0000000000">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Website</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text"
+                                               class="form-control"
+                                               data-ng-model="newCustomer.website"
+                                               placeholder="www.example.com">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label for="">Email</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="email"
+                                               class="form-control"
+                                               required
+                                               data-ng-model="newCustomer.email"
+                                               placeholder="info@example.com">
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                        class="btn btn-success"
+                                        data-ng-disabled="!canSubmitCustomer()"
+                                        data-ng-click="isNewCustomerCollapsed = !isNewCustomerCollapsed"
+                                        >Create</button>
+                                <button type="button" class="btn btn-default"
+                                        data-ng-click="isNewCustomerCollapsed = !isNewCustomerCollapsed"
+                                        >Cancel</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><span class="fa fa-building-o"></span>&nbsp;Customers</div>
+                <div class="panel-body block_view">
+                    <table class="table">
+                        <tbody>
+                        <tr data-ng-repeat="customer in customers" style="cursor: pointer;" data-ng-class="{success: customer == selectedCustomer}" data-ng-click="selectCustomer(customer)">
+                            <td>{{customer.name}}</td>
+                            <td style="text-align: right;">
+                                <span class="glyphicon glyphicon-remove" data-ng-click="removeCustomer(customer)"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

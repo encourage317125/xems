@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  startdate: 2014-04-18
+  enddate: 2014-04-18
+  status: 1
+  created_by: 1
+  category_id: 
+
+two:
+  name: MyString
+  startdate: 2014-04-18
+  enddate: 2014-04-18
+  status: 1
+  created_by: 1
+  category_id: 

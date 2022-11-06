@@ -1,0 +1,56 @@
+<div class="page-signin" data-ng-controller="LoginCtrl">
+
+    <div class="signin-header">
+        <div class="container text-center">
+            <section class="logo">
+                <a href="#/"><img src="/assets/logo.png" />&nbsp;Log in</a>
+            </section>
+        </div>
+    </div>
+
+    <div class="signin-body">
+        <div class="container">
+            <div class="form-container">
+                <form name="form_login" data-ng-submit="submit()" class="form-horizontal form-validation">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                </span>
+                                <input type="email"
+                                       class="form-control"
+                                       placeholder="Email"
+                                       required
+                                       data-ng-model="user.email"
+                                       >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </span>
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="password"
+                                       data-ng-model="user.password"
+                                       >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block" data-ng-disabled="!canSubmit()">Log in</button>
+                        </div>
+                    </fieldset>
+                </form>
+                <div ng-repeat="(key,val) in alerts" class="alert {{key}}">
+                    <button type="button" class="close" data-ng-click="closeAlert()">×</button>
+                    <div ng-repeat="msg in val">{{msg}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
